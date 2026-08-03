@@ -1,0 +1,7 @@
+interface:
+  display_name: "C++ Code Quality"
+  short_description: "规范 C++17 代码的排版、命名、注释和局部可读性，并控制遗留代码修改范围。"
+  default_prompt: "使用 $cpp-code-quality 按项目约束修改或审查 C++ 代码，只整理本次任务涉及的完整结构单元。"
+
+policy:
+  allow_implicit_invocation: true
