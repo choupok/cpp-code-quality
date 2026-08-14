@@ -332,6 +332,8 @@ This Skill targets C++17. Do not introduce `concept` or `requires`.
 
 Every `case` and `default` has an independent scope.
 
+Use the expanded form by default.
+
 ```cpp
 switch (state)
 {
@@ -354,11 +356,35 @@ switch (state)
 }
 ```
 
+A short branch may use a single-line scoped block when it contains only:
+
+- one simple operation followed by an unconditional `break` or `return`; or
+- one unconditional `break` or `return`.
+
+```cpp
+switch (state)
+{
+	case RuntimeState::Idle: { handler = &idle_handler; break; }
+	case RuntimeState::Running: { handler = &running_handler; break; }
+	default: { return false; }
+}
+```
+
+Do not use the single-line form when the branch contains:
+
+- a local variable declaration;
+- more than one operation before the terminating statement;
+- nested control flow;
+- a comment or preprocessor directive;
+- intentional fallthrough.
+
 Rules:
 
 - indent `case` and `default` one tab inside `switch`;
 - add braces for every case regardless of local variables;
-- leave one blank line between cases;
+- omit blank lines between consecutive single-line short branches;
+- leave one blank line between expanded branches and at boundaries between short and expanded branches;
+- expand a short branch as soon as it no longer meets the single-line conditions;
 - normalize the complete `switch` when any case is substantively modified.
 
 Use full Allman layout for compound control flow.

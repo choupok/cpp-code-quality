@@ -21,10 +21,12 @@ Agent 执行任务时，以仓库根目录的 `SKILL.md`、`formatting-and-layou
 
 ## 1. 规范定位、适用范围与修改边界
 
-本规范用于创建、修改、重构、格式化或审查以下 C++ 文件：
+本规范用于创建、修改、重构、格式化或聚焦审查以下 C++ 文件：
 
 - `.h`、`.hpp`、`.hh`
 - `.cpp`、`.cc`、`.cxx`
+
+用户明确要求只读审查 C++ 排版、分组、命名或注释时也适用本规范。仅进行调用链追踪、影响面分析、仓库事实核对等顶层只读调查，且尚不需要作出 C++ 代码质量判断时，不应仅因读取了 C++ 文件而启用本规范。
 
 纯 C 文件不强制套用 C++ 的类、构造函数、成员或命名规则。第三方、vendored、generated 和构建输出默认不修改；用户明确要求修改时，应保持上游风格并缩小改动。
 
@@ -436,7 +438,7 @@ while (is_busy())
 
 ### switch
 
-每个 `case` 和 `default` 都建立独立作用域，并在分支之间保留一个空行。
+每个 `case` 和 `default` 都建立独立作用域，默认使用展开形式。
 
 ```cpp
 switch (state)
@@ -459,6 +461,22 @@ switch (state)
 	}
 }
 ```
+
+短分支仅包含以下内容时，可以使用单行作用域块：
+
+- 一个简单操作，随后无条件 `break` 或 `return`；
+- 仅有一个无条件 `break` 或 `return`。
+
+```cpp
+switch (state)
+{
+	case RuntimeState::Idle: { handler = &idle_handler; break; }
+	case RuntimeState::Running: { handler = &running_handler; break; }
+	default: { return false; }
+}
+```
+
+分支包含局部变量声明、终止语句前有多个操作、嵌套控制流、注释、预处理指令或有意贯穿时，不能使用单行形式。连续的单行短分支之间不留空行；展开分支之间以及单行与展开分支的边界保留一个空行。短分支不再满足单行条件时必须立即展开。修改任一 `case` 后，仍需规范化完整 `switch`。
 
 有意贯穿时使用 `[[fallthrough]];`。删除空 `else`，禁止静默的空 `catch`，不保留“以后再写”的空函数占位；可默认化的特殊成员函数使用 `= default`。
 
