@@ -1,6 +1,6 @@
 ---
 name: cpp-code-quality
-description: Apply this Skill whenever a task creates, modifies, refactors, formats, or reviews C++17 headers or source files. Enforce complete-structural-unit formatting, responsibility grouping, comments, naming, basic readability and ownership boundaries, legacy-code scope control, and non-destructive validation.
+description: Apply this Skill whenever a task creates, modifies, refactors, formats, or performs a focused code-quality review of C++17 headers or source files. Enforce complete-structural-unit formatting, responsibility grouping, comments, naming, basic readability and ownership boundaries, legacy-code scope control, and non-destructive validation. Do not trigger it merely because a read-only investigation touches C++ files.
 ---
 
 # C++ Code Quality
@@ -42,7 +42,7 @@ Do not complete a C++ task after applying only formatting rules or only comment 
 
 ## Applicability
 
-Use this Skill whenever a task creates, modifies, refactors, formats, or reviews:
+Use this Skill whenever a task creates, modifies, refactors, formats, or performs a focused code-quality review of:
 
 - `.h`
 - `.hpp`
@@ -51,7 +51,10 @@ Use this Skill whenever a task creates, modifies, refactors, formats, or reviews
 - `.cc`
 - `.cxx`
 
-Also use it for read-only audits of C++ formatting, grouping, naming, and comments.
+Also use it for explicit read-only audits of C++ formatting, grouping, naming, and comments.
+
+Do not use it merely for call-chain tracing, impact analysis, repository fact-finding,
+or other top-level read-only investigation where no C++ quality judgment is yet required.
 
 When a C++ task also requires adding or updating Visual Studio project entries, modify only the necessary project files. Apply the Visual Studio encoding and generated-layout exceptions from `formatting-and-layout.md`; do not apply C++ layout rules to XML or solution files.
 
@@ -197,7 +200,7 @@ Requirements:
 
 ### Audit or review
 
-Use for read-only style, formatting, comment, and code-quality audits.
+Use for explicit read-only style, formatting, comment, and code-quality audits.
 
 Requirements:
 
@@ -206,6 +209,9 @@ Requirements:
 - provide actionable corrections;
 - prioritize findings when useful;
 - switch to an editing mode only when the user explicitly requests changes.
+
+Do not enter this mode merely because the current task opened C++ files while
+investigating architecture, call chains, or impact boundaries.
 
 ## Modification scope
 
