@@ -262,6 +262,15 @@ send_command(command, /*timeout_ms=*/500, /*retry_count=*/2);
 
 注释必须使用接口中的准确参数名，不能翻译或另造名称。
 
+Windows 头文件可能定义 `min` 和 `max` 宏。只要目标代码可能包含 Windows 头文件，标准算法调用必须显式写模板参数，避免 `std::min(...)` 和 `std::max(...)` 被宏展开：
+
+```cpp
+const int visible_width = std::min<int>(window_width, content_width);
+const std::size_t item_count = std::max<std::size_t>(items.size(), minimum_item_count);
+```
+
+不要仅依赖 `NOMINMAX` 让裸写调用保持安全；新代码中也不要使用未限定的 `min` 或 `max`。模板参数应匹配期望的公共类型，操作数类型不一致时应显式转换。该规则适用于新增代码和实质修改的完整结构单元，不要求批量改写无关遗留代码。
+
 ### 返回
 
 简单返回保持单行，不写多余括号。

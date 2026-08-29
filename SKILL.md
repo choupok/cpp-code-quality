@@ -338,6 +338,7 @@ After modifying C++ code, verify all applicable items.
 - Every `case` follows the required independent-scope layout.
 - Constructor initializer lists follow the active layout and declaration order.
 - Function calls, expressions, and signatures were not split without readability benefit.
+- In Windows-targeted code, standard `min` and `max` calls use explicit template arguments when Windows headers may define the corresponding macros.
 - Blank-line rules are consistent.
 - No trailing whitespace or whitespace-only blank lines remain.
 

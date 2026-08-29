@@ -128,6 +128,21 @@ Do not batch-rewrite unrelated legacy declarations.
 
 Keep expressions and calls on one line when they remain clear.
 
+### Windows macro-sensitive standard algorithms
+
+When Windows headers may be included, write standard `min` and `max` calls with an explicit template argument:
+
+```cpp
+const int visible_width = std::min<int>(window_width, content_width);
+const std::size_t item_count = std::max<std::size_t>(items.size(), minimum_item_count);
+```
+
+This avoids function-like `min` and `max` macros expanding the identifier in `std::min(...)` or `std::max(...)`. Do not rely on `NOMINMAX` alone to make a bare call safe, and do not use unqualified `min` or `max` in new code.
+
+Choose the explicit template argument to match the intended common type. When operands have different types, make the required conversion explicit rather than hiding it in template deduction.
+
+Apply this rule to new code and every substantively modified structural unit; do not batch-rewrite unrelated legacy code.
+
 Do not split merely because:
 
 - there are three or four arguments;
