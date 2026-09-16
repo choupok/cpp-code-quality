@@ -169,6 +169,10 @@ Allow exceptions for:
 
 Do not create excessive alignment whitespace merely to stay under the soft limit. Extract a semantic value or rewrite the flow when wrapping would be less readable.
 
+Prefer readability, semantic completeness, and compactness before line length. Do not mechanically wrap parameter lists, function calls, constructor expressions, or simple conditions to satisfy an 80-, 100-, or 120-column preference.
+
+This single-line preference applies equally to helper calls, framework APIs, setters and getters, constructor calls, standard-library calls, callback registration, and simple logging calls.
+
 When a call must be split, keep the first argument on the opening line and vertically align subsequent arguments with it. Keep the closing parenthesis after the last argument.
 
 ```cpp
@@ -191,11 +195,13 @@ Do not annotate ordinary self-explanatory parameters. Do not translate or invent
 
 ## Function declarations and definitions
 
-Prefer a single-line signature when it is clear.
+Keep a function declaration or definition on one line whenever its complete signature remains reasonably readable.
 
 Do not use parameter count as an automatic wrapping rule.
 
-When wrapping is necessary:
+Wrap only when the single line is genuinely too long, a parameter type or expression is complex, or the split clearly improves readability. Do not wrap merely to satisfy a fixed column width or an automatic formatter preference.
+
+When wrapping is justified:
 
 - keep the first parameter on the same line as the function name;
 - align later parameters vertically with the first parameter;
@@ -795,6 +801,19 @@ Keep variable scope as small as practical.
 
 Use `const` for meaningful local values that are not reassigned.
 
+For multiple independent parse, validation, or check operations, prefer one semantic local result per operation and combine those results afterward:
+
+```cpp
+const bool layout_ok = parse_layout(object[layout_key], layout);
+const bool theme_ok = parse_theme(object[theme_key], theme);
+
+return layout_ok && theme_ok;
+```
+
+Do not write a long waterfall of independent calls as one chained return, especially when the chain would require vertically expanding several calls. If there are only one or two very simple conditions, a compact chain is acceptable.
+
+Name local results for their meaning, such as `layout_ok`, `theme_ok`, `config_loaded`, or `page_indicator_ok`. Avoid names such as `ret1`, `ret2`, `tmp`, or `flag`, except in a tiny scope where the meaning is immediately obvious.
+
 Do not create a temporary variable that only forwards a result without adding semantic value.
 
 Good:
@@ -971,6 +990,14 @@ Keep an index-based loop when the business logic needs the index, adjacent eleme
 Do not replace a clear index loop with a range loop plus a manually maintained counter.
 
 Use `std::size_t` for container indices by default.
+
+For a small collection whose size is fixed at compile time, prefer `std::array`:
+
+```cpp
+std::array<Widget*, 3> slots {};
+```
+
+Do not replace a fixed-size collection with `std::vector` solely to make iteration convenient. Do not introduce dynamic containers, `unordered_map`, `shared_ptr`, or complex ownership wrappers merely to follow a generic modern-C++ preference; use them when runtime sizing, lookup semantics, or ownership requirements justify them.
 
 When an external interface requires `int`, perform a clear conversion at the interface boundary and avoid repeated signed/unsigned mixing.
 
