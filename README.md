@@ -105,11 +105,15 @@ $HOME/.agents/skills/cpp-code-quality
 
 ## 规则来源与优先级
 
-Agent 实际执行时，以以下文件为运行时规则来源：
+Agent 的规范来源与查询入口区分如下：
 
-1. `SKILL.md`
-2. `formatting-and-layout.md`
-3. `comments-and-documentation.md`
+- `SKILL.md` — 规则加载、优先级、适用范围与验收约束；
+- `RULE_INDEX.md` — 按代码结构定位规范和特例的导航表，**不是**另一份规则源；
+- `formatting-and-layout.md` — 格式与布局的权威规则；
+- `comments-and-documentation.md` — 注释与文档的权威规则；
+- `tests/formatting-cases.md` — 正反例回归样本，不覆盖权威规则。
+
+按 `SKILL.md` 加载所有相关规则，不要求每次无条件全文预读。遇到歧义回到权威规则源，不根据旧代码或速查摘要自行补造例外。
 
 中文规则文档面向人阅读，是运行时规则的配套说明，不是独立规则源。两者不一致时，以运行时文件为准；规则变更应在同一次修改中同步更新中文说明。
 
@@ -119,8 +123,11 @@ Agent 实际执行时，以以下文件为运行时规则来源：
 cpp-code-quality/
 ├── README.md
 ├── SKILL.md
+├── RULE_INDEX.md
 ├── formatting-and-layout.md
 ├── comments-and-documentation.md
+├── tests/
+│   └── formatting-cases.md
 ├── agents/
 │   └── openai.yaml
 ├── docs/

@@ -70,6 +70,8 @@ Use Allman braces for:
 
 Always use braces for control-flow bodies, including one-statement bodies.
 
+The compact single-line scoped `case` form is the **only** exception to the multiline block layout here; it is narrowly defined in [`switch` and `case`](#switch-and-case). It does not permit attached braces for functions, lambdas, or other control-flow statements.
+
 ```cpp
 if (!is_ready)
 {
@@ -83,7 +85,7 @@ Do not preserve attached braces inside a modified structural unit.
 
 - Keep exactly one blank line between function definitions.
 - Do not use two or more consecutive blank lines.
-- Do not add an empty line immediately inside an opening or closing brace.
+- Do not add an empty line immediately inside an opening or closing brace, **except** the one-blank-line boundary of a non-empty namespace described in [Namespaces](#namespaces-forward-declarations-and-using).
 - Use one blank line between responsibility groups.
 - Use one blank line between meaningful stages inside a function when it improves reading.
 - Do not insert blank lines mechanically after every few statements.
@@ -199,7 +201,7 @@ Keep a function declaration or definition on one line whenever its complete sign
 
 Do not use parameter count as an automatic wrapping rule.
 
-Wrap only when the single line is genuinely too long, a parameter type or expression is complex, or the split clearly improves readability. Do not wrap merely to satisfy a fixed column width or an automatic formatter preference.
+Wrap only when the single line is genuinely too long, a parameter type or expression is complex, or the split clearly improves readability. Do not wrap merely to satisfy a fixed column width or an automatic formatter preference. If both layouts are reasonably readable, **keep the single-line form**; parameter count alone never authorizes a split.
 
 When wrapping is justified:
 
@@ -287,7 +289,7 @@ Foo::Foo(DataManager& data_manager)
 
 For braced initialization:
 
-- put one space inside a non-empty single-line initializer: `{ value1, value2 }`;
+- put exactly one space inside an ordinary non-empty single-line initializer: `{ value1, value2 }`; in a homogeneous aligned initializer table, only minimal extra padding before `}` is permitted to align row endings;
 - write an empty initializer as `{}`;
 - use Allman layout for a multiline initializer;
 - put one item per line in an ordinary multiline initializer;
@@ -316,7 +318,7 @@ const std::vector<MenuItem> items =
 };
 ```
 
-Do not use table alignment when the objects are heterogeneous, expressions are complex, lines become too long, or alignment would create excessive whitespace or broad diff churn.
+Do not use table alignment when the objects are heterogeneous, expressions are complex, lines become too long, or alignment would create excessive whitespace or broad diff churn. The extra spaces before `}` in the homogeneous example are **optional table padding**, not the default for ordinary braced initializers. Do not align by adding padding across unrelated initializer groups.
 
 Avoid complex anonymous objects and ambiguous `initializer_list` construction. Do not mechanically migrate unrelated legacy initialization syntax.
 
@@ -593,6 +595,8 @@ Keep `using` declarations in the smallest useful scope. Do not add file-global a
 Place forward declarations after includes and before the namespace or type definitions. Keep them together rather than scattering them through the file.
 
 Use Allman layout for namespaces.
+
+For any **non-empty** named or anonymous namespace, put exactly one blank line immediately after its opening brace and exactly one blank line immediately before its closing brace. This is the namespace-only exception to the general no-inner-blank-lines rule. Do not insert extra blank lines between nested namespace scopes or inside other block types by analogy.
 
 Always add a namespace-closing comment.
 
@@ -921,12 +925,23 @@ const bool should_show = is_authorized && is_visible_node;
 
 Do not wrap mechanically based only on condition count. For three or more terms, consider the 120-column soft limit, expression complexity, and semantic grouping.
 
-When a logical expression must wrap, put each top-level `&&` or `||` at the beginning of a continuation line and align it vertically with the assignment `=`.
+When a logical expression must wrap, put each top-level `&&` or `||` at the beginning of a continuation line. For an assignment, align those operators vertically with `=`. For an `if` or `while` condition without `=`, align them with the first condition operand after `(`; for a direct `return`, align them with the first returned operand. Use tabs for indentation and only minimal spaces for the remaining display-column adjustment. Prefer a semantic named boolean over cumbersome wrapping.
 
 ```cpp
 const bool should_refresh = has_config_changed
 						  || has_runtime_changed
 						  || needs_forced_refresh;
+```
+
+For a condition without an assignment anchor:
+
+```cpp
+if (is_ready
+	&& has_permission
+	&& needs_refresh)
+{
+	refresh();
+}
 ```
 
 Do not mix leading and trailing operator styles inside one expression.
