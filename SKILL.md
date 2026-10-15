@@ -23,22 +23,19 @@ It governs:
 
 It does not decide architecture ownership, module decomposition, API consolidation, namespace design, or whether a class should be a Manager, Service, Facade, Registry, Resolver, Builder, Request, Spec, or Context. Those decisions belong to a separate architecture/refactoring Skill.
 
-## Mandatory rule loading
+## Rule discovery and loading
 
 For every applicable task:
 
-1. Read this `SKILL.md`.
-2. Always read `formatting-and-layout.md`.
-3. Always read `comments-and-documentation.md`.
-4. Check the repository root and its top-level `docs/` directory for project-specific C++ rules.
-5. Merge the active rules according to the priority defined below.
-6. Determine the task mode.
-7. Apply both rule files before editing or reviewing code.
-8. Complete the final self-check before responding.
+1. Read this `SKILL.md` and `RULE_INDEX.md` (navigation only).
+2. Check the repository root and its top-level `docs/` directory for project-specific C++ rules; resolve authorized overrides using the priority below.
+3. Identify the task mode and the complete structural units in scope. Enumerate constructs present in those units, including nested lambdas, initializer lists, conditionals, `switch` branches, and preprocessor directives.
+4. Read the **baseline** sections in `formatting-and-layout.md` (Baseline, Encoding and line endings, Indentation, Braces, Blank lines, Horizontal whitespace), plus **every applicable** construct section and linked exception in `RULE_INDEX.md`. A construct appearing inside another construct needs both rules. Follow the source text, not an index summary.
+5. Review `comments-and-documentation.md` for comment language, relevant responsibility groups, public API contracts, ownership/lifetime, callback behavior, and error-path comment triggers. Read the applicable source sections before creating, changing, or evaluating comments; do not silently skip a required comment merely because this task was classified as formatting.
+6. If an applicability boundary is ambiguous, read the full relevant source file rather than guessing. The index is not a substitute for the normative rule files.
+7. Apply the active rules, including explicit exceptions, before editing or reviewing code; complete the final self-check before responding.
 
-Neither rule file is optional or read-on-demand.
-
-Do not complete a C++ task after applying only formatting rules or only comment rules.
+This is **bounded rule discovery**, not permission to ignore unfetched relevant rules. A new or unfamiliar code shape must trigger rule lookup before formatting. Do not treat nearby legacy formatting as an unwritten exception.
 
 ## Applicability
 
@@ -306,7 +303,7 @@ Do not let legacy code decide:
 For an applicable task:
 
 1. Identify the repository and target files.
-2. Load both mandatory rule files.
+2. Load the rule index, baseline rules, and all construct-specific rules and exceptions relevant to the task.
 3. Check the limited project-rule candidates.
 4. Resolve explicitly authorized overrides.
 5. Determine whether the target is project code, pure C, third-party code, or generated code.
@@ -342,7 +339,9 @@ After modifying C++ code, verify all applicable items.
 - Independent parse, validation, and check operations are not written as long chained returns when named local results improve readability.
 - Fixed-size compile-time collections prefer `std::array` when appropriate; dynamic containers and ownership abstractions are not introduced without a real requirement.
 - In Windows-targeted code, standard `min` and `max` calls use explicit template arguments when Windows headers may define the corresponding macros.
-- Blank-line rules are consistent.
+- Blank-line rules are consistent, including the non-empty namespace exception.
+- Short `case` blocks and homogeneous initializer tables use their explicit exceptions only when eligible.
+- Wrapped conditions and calls follow the applicable continuation anchor, not a generic guessed indentation.
 - No trailing whitespace or whitespace-only blank lines remain.
 
 ### Structure

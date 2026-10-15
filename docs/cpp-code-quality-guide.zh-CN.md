@@ -2,7 +2,7 @@
 
 本文档面向使用和维护 C++17 代码的开发者，说明 `cpp-code-quality` Skill 实际采用的排版、命名、注释和基础代码质量规则。
 
-Agent 执行任务时，以仓库根目录的 `SKILL.md`、`formatting-and-layout.md` 和 `comments-and-documentation.md` 为运行时规则来源。本文档是便于人阅读的配套说明；若内容不一致，以运行时文件为准，并应在后续修改中同步修正。
+Agent 执行任务时，以仓库根目录的 `SKILL.md`、`formatting-and-layout.md` 和 `comments-and-documentation.md` 为运行时规则来源。可先通过 `RULE_INDEX.md` 按代码结构查询对应章节及特例，并参考 `tests/formatting-cases.md` 的正反例；这两个辅助文件不构成独立规范。本文档是便于人阅读的配套说明；若内容不一致，以运行时文件为准，并应在后续修改中同步修正。
 
 ## 目录
 
@@ -121,7 +121,7 @@ Tab 同时优先用于作用域缩进和同质表格中的列对齐。默认按 
 
 ### Allman 花括号
 
-函数、控制流、类、结构体、枚举、命名空间和 Lambda 都使用 Allman 风格，并且控制流始终保留花括号。
+函数、控制流、类、结构体、枚举、命名空间和 Lambda 都使用 Allman 风格，并且控制流始终保留花括号。例外仅限满足条件的短 `case` 独立作用域可采用单行块，不能类推到 `if`、Lambda 等结构。非空 namespace 的 `{` 后与 `}` 前各留一行空行；普通函数、类、控制流不使用这条 namespace 专属特例。
 
 不推荐：
 
